@@ -1,14 +1,13 @@
-# Usando a imagem oficial do OpenJDK
-FROM openjdk:21-jdk-slim AS build
+# Etapa de build com Maven já incluso
+FROM maven:3.9.4-eclipse-temurin-21 AS build
 
-# Definindo o diretório de trabalho dentro do container
 WORKDIR /app
 
 # Copiando o arquivo pom.xml e baixando as dependências
-COPY pom.xml .
+COPY pom.xml .  
 RUN mvn dependency:go-offline
 
-# Copiando o código fonte para o container
+# Copiando o restante do código fonte
 COPY src /app/src
 
 # Compilando o projeto
