@@ -68,11 +68,11 @@ public class Brinquedo {
 		this.marca = marca;
 	}
 
-	public byte[] getImg() {
+	public String getImg() {
 		return img;
 	}
 
-	public void setImg(byte[] img) {
+	public void setImg(String img) {
 		this.img = img;
 	}
 
