@@ -16,7 +16,7 @@ public class Brinquedo {
 	private String marca;
 	
 	@Lob
-    @Column(columnDefinition = "bytea")
+    @Column(columnDefinition = "text")
 	private String img;
 	
 	private double valor;
