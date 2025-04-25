@@ -10,10 +10,12 @@ import jakarta.persistence.Lob;
 @Entity
 public class Brinquedo {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private int codigo;
 	private String descricao;
 	private String categoria;
 	private String marca;
+	
 	
 	@Lob
     @Column(columnDefinition = "text")
