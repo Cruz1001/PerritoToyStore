@@ -17,7 +17,7 @@ public class Brinquedo {
 	
 	@Lob
     @Column(columnDefinition = "bytea")
-	private byte[] img;
+	private String img;
 	
 	private double valor;
 	private String detalhes;
