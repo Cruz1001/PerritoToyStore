@@ -25,7 +25,7 @@ public class Brinquedo {
 	public Brinquedo() {
 	}
 
-	public Brinquedo(int codigo, String descricao, String categoria, String marca, byte[] img, double valor,
+	public Brinquedo(int codigo, String descricao, String categoria, String marca, String img, double valor,
 			String detalhes) {
 		this.codigo = codigo;
 		this.descricao = descricao;
