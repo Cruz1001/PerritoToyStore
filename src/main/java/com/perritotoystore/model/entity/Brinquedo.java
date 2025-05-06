@@ -19,7 +19,8 @@ public class Brinquedo {
 	
 	@Lob
     @Column(columnDefinition = "text")
-	private String img;
+	private byte[] img;
+	private String imgType;
 	
 	private double valor;
 	private String detalhes;
@@ -27,7 +28,7 @@ public class Brinquedo {
 	public Brinquedo() {
 	}
 
-	public Brinquedo(int codigo, String descricao, String categoria, String marca, String img, double valor,
+	public Brinquedo(int codigo, String descricao, String categoria, String marca, byte[] img, double valor,
 			String detalhes) {
 		this.codigo = codigo;
 		this.descricao = descricao;
@@ -70,11 +71,11 @@ public class Brinquedo {
 		this.marca = marca;
 	}
 
-	public String getImg() {
+	public byte[] getImg() {
 		return img;
 	}
 
-	public void setImg(String img) {
+	public void setImg(byte[] img) {
 		this.img = img;
 	}
 
@@ -93,5 +94,21 @@ public class Brinquedo {
 	public void setDetalhes(String detalhes) {
 		this.detalhes = detalhes;
 	}
+	
+	public String[] getListaCategoria() {
+	    String[] categorias = {
+	        "Jogos Eletrônicos",
+	        "Jogos Infantis",
+	        "Pelucias"
+	    };
+	    return categorias;
+	}
 
+	public String getImgType() {
+		return imgType;
+	}
+
+	public void setImgType(String imgType) {
+		this.imgType = imgType;
+	}
 }
