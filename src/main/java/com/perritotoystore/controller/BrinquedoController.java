@@ -58,8 +58,7 @@ public class BrinquedoController {
 	
 	//Criar brinquedo com imagem
 	@PostMapping("/img") //imagem
-	public ResponseEntity<Brinquedo> createBrinquedoImg(@RequestPart Brinquedo brinquedo,
-															@RequestPart MultipartFile imageFile) throws IOException {
+	public ResponseEntity<Brinquedo> createBrinquedoImg(@RequestBody Brinquedo brinquedo, @RequestBody MultipartFile imageFile) throws IOException {
 		Brinquedo novoBrinquedo = brinquedoService.createBrinquedoImg(brinquedo, imageFile);
 		return  new  ResponseEntity<>(novoBrinquedo, HttpStatus.CREATED);
 	}
