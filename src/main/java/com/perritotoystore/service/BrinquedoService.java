@@ -38,6 +38,7 @@ public class BrinquedoService {
     	return brinquedoRepository.save(brinquedo);
     }
     
+    
     //Lista categoria
     /*public String[] getListCategoria() {
     	Brinquedo brinquedo = new Brinquedo();

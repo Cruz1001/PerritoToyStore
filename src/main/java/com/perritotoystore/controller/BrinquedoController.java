@@ -3,6 +3,8 @@ package com.perritotoystore.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.perritotoystore.model.entity.Brinquedo;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+
 
 
 
@@ -105,4 +108,13 @@ public class BrinquedoController {
 					.contentType(MediaType.valueOf(brinquedo.getImgType()))
 					.body(imageFile);
 	}
+	@GetMapping("/categorias")
+	public ResponseEntity<List<String>> getCategorias() {
+    		Brinquedo brinquedo = new Brinquedo(); // só pra acessar o método
+    		List<String> categorias = Arrays.asList(brinquedo.getListaCategoria());
+    		return ResponseEntity.ok(categorias);
 }
+
+}
+	
+
