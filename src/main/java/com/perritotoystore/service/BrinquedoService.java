@@ -30,6 +30,9 @@ public class BrinquedoService {
         brinquedoRepository.deleteById(codigo);
         return !brinquedoRepository.existsById(codigo);
     }
+    public void salvar(Brinquedo brinquedo) {
+        brinquedoRepository.save(brinquedo);
+    }
     
     //Criar brinquedo imagem
     public Brinquedo createBrinquedoImg(Brinquedo brinquedo, MultipartFile imageFile) throws IOException {

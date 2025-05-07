@@ -128,10 +128,32 @@ public class BrinquedoController {
 		error.put("erro", "Erro ao buscar brinquedos por categoria");
 		error.put("detalhes", e.toString()); // imprime a descrição completa do erro
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-    }
+    }}
+	@PutMapping("/{codigo}")
+	public ResponseEntity<?> atualizarBrinquedo(@PathVariable int codigo, @RequestBody Brinquedo novoBrinquedo) {
+		try {
+		Brinquedo brinquedoExistente = brinquedoService.getBrinquedoByCodigo(codigo);
+		if (brinquedoExistente == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Brinquedo não encontrado.");
+		}
+	
+		// Atualiza os campos permitidos
+		brinquedoExistente.setDescricao(novoBrinquedo.getDescricao());
+		brinquedoExistente.setCategoria(novoBrinquedo.getCategoria());
+		brinquedoExistente.setImg(novoBrinquedo.getImg()); // se quiser editar imagem também
+	
+		brinquedoService.salvar(brinquedoExistente);
+	
+		return ResponseEntity.ok("Brinquedo atualizado com sucesso.");
+		} catch (Exception e) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Erro ao atualizar brinquedo: " + e.getMessage());
+		}
+	}
+    
 }
 
 
-}
+
 	
 
