@@ -13,9 +13,9 @@ public class BrinquedoDTO {
         private String categoria;
         private double valor;
 
-        private byte[] imagemBase64;
+        private String imagemBase64;
 
-        public BrinquedoDTO(int codigo, String descricao, String categoria, double valor, byte[] imagemBase64) {
+        public BrinquedoDTO(int codigo, String descricao, String categoria, double valor, String imagemBase64) {
         this.codigo = codigo;
         this.descricao = descricao;
         this.categoria = categoria;
@@ -56,11 +56,11 @@ public class BrinquedoDTO {
         this.valor = valor;
     }
 
-    public byte[] getImagemBase64() {
+    public String getImagemBase64() {
         return imagemBase64;
     }
 
-    public void setImagemBase64(byte[] imagemBase64) {
+    public void setImagemBase64(String imagemBase64) {
         this.imagemBase64 = imagemBase64;
 }
 }

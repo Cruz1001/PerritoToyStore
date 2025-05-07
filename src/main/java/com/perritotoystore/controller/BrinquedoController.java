@@ -119,20 +119,25 @@ public class BrinquedoController {
     		return ResponseEntity.ok(categorias);
 }
 	
-	@GetMapping("/categorias/{categoria}")
-	public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categoria) {
+@GetMapping("/categorias/{categoria}")
+public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categoria) {
     try {
         List<Brinquedo> brinquedos = brinquedoService.getBrinquedosPorCategoria(categoria);
 
-        // Converte a lista de brinquedos para DTO
         List<BrinquedoDTO> brinquedoDTOs = brinquedos.stream()
-                .map(brinquedo -> new BrinquedoDTO(
-                        brinquedo.getCodigo(),
-                        brinquedo.getDescricao(),
-                        brinquedo.getCategoria(),
-                        brinquedo.getValor(),
-                        brinquedo.getImg()  // Caso a imagem seja convertida para base64
-                ))
+                .map(brinquedo -> {
+                    String imgBase64 = null;
+                    if (brinquedo.getImg() != null) {
+                        imgBase64 = Base64.getEncoder().encodeToString(brinquedo.getImg());
+                    }
+                    return new BrinquedoDTO(
+                            brinquedo.getCodigo(),
+                            brinquedo.getDescricao(),
+                            brinquedo.getCategoria(),
+                            brinquedo.getValor(),
+                            imgBase64
+                    );
+                })
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(brinquedoDTOs);
