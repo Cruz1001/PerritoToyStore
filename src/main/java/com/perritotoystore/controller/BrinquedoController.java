@@ -68,27 +68,30 @@ public class BrinquedoController {
 	}*/
 	
 	@PostMapping("/img")
-	public ResponseEntity<Brinquedo> createBrinquedoComImagem(@RequestBody JsonNode body) throws IOException {
-		// extrai o brinquedo
-		JsonNode brinquedoNode = body.get("brinquedo");
-		String imageBase64 = body.get("imageFile").asText();
-	
-		// converte JSON em objeto Brinquedo
-		ObjectMapper mapper = new ObjectMapper();
-		Brinquedo brinquedo = mapper.treeToValue(brinquedoNode, Brinquedo.class);
-	
-		// trata a imagem base64
-		if (imageBase64 != null && !imageBase64.isEmpty()) {
-			if (imageBase64.contains(",")) {
-				imageBase64 = imageBase64.split(",")[1]; // remove prefixo data:image/jpeg;base64,
-			}
-			byte[] imagem = Base64.getDecoder().decode(imageBase64);
-			brinquedo.setImg(imagem);
-		}
-	
-		Brinquedo novoBrinquedo = brinquedoService.createBrinquedo(brinquedo);
-		return new ResponseEntity<>(novoBrinquedo, HttpStatus.CREATED);
-	}
+	public ResponseEntity<?> createBrinquedoComImagem(@RequestBody JsonNode body) {
+    try {
+        JsonNode brinquedoNode = body.get("brinquedo");
+        String imageBase64 = body.get("imageFile").asText();
+ 
+        ObjectMapper mapper = new ObjectMapper();
+        Brinquedo brinquedo = mapper.treeToValue(brinquedoNode, Brinquedo.class);
+ 
+        if (imageBase64 != null && !imageBase64.isEmpty()) {
+            if (imageBase64.contains(",")) {
+                imageBase64 = imageBase64.split(",")[1];
+            }
+            byte[] imagem = Base64.getDecoder().decode(imageBase64);
+            brinquedo.setImg(imagem);
+        }
+ 
+        Brinquedo novoBrinquedo = brinquedoService.createBrinquedo(brinquedo);
+        return new ResponseEntity<>(novoBrinquedo, HttpStatus.CREATED);
+ 
+    } catch (Exception e) {
+        e.printStackTrace(); // PRA VER O ERRO NO LOG
+        return new ResponseEntity<>("Erro interno: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
 
 
 	//Get Imagem
