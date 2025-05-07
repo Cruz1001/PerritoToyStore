@@ -37,6 +37,10 @@ public class BrinquedoService {
     	brinquedo.setImg(imageFile.getBytes());
     	return brinquedoRepository.save(brinquedo);
     }
+    public List<Brinquedo> getBrinquedosPorCategoria(String categoria) {
+        return brinquedoRepository.findByListaCategoriaContaining(categoria);
+    }
+    
     
     
     //Lista categoria

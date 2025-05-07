@@ -114,6 +114,12 @@ public class BrinquedoController {
     		List<String> categorias = Arrays.asList(brinquedo.getListaCategoria());
     		return ResponseEntity.ok(categorias);
 }
+	
+	@GetMapping("/categorias/{categoria}")
+	public ResponseEntity<List<Brinquedo>> getBrinquedosPorCategoria(@PathVariable String categoria) {
+		List<Brinquedo> brinquedos = brinquedoService.getBrinquedosPorCategoria(categoria);
+		return ResponseEntity.ok(brinquedos);
+	}
 
 }
 	
