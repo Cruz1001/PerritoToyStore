@@ -117,8 +117,13 @@ public class BrinquedoController {
 	
 	@GetMapping("/categorias/{categoria}")
 	public ResponseEntity<List<Brinquedo>> getBrinquedosPorCategoria(@PathVariable String categoria) {
-		List<Brinquedo> brinquedos = brinquedoService.getBrinquedosPorCategoria(categoria);
-		return ResponseEntity.ok(brinquedos);
+		try {
+			List<Brinquedo> brinquedos = brinquedoService.getBrinquedosPorCategoria(categoria);
+			return ResponseEntity.ok(brinquedos);}
+		catch (Exception e) {
+			e.printStackTrace(); // PRA VER O ERRO NO LOG
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
 	}
 
 }

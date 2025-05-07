@@ -18,7 +18,7 @@ public class Brinquedo {
 	
 	
 	@Lob
-    //@Column(columnDefinition = "text")
+    	//@Column(columnDefinition = "text")
 	private byte[] img;
 	private String imgType;
 	
