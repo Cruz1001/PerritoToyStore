@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 
@@ -116,15 +118,19 @@ public class BrinquedoController {
 }
 	
 	@GetMapping("/categorias/{categoria}")
-	public ResponseEntity<List<Brinquedo>> getBrinquedosPorCategoria(@PathVariable String categoria) {
-		try {
-			List<Brinquedo> brinquedos = brinquedoService.getBrinquedosPorCategoria(categoria);
-			return ResponseEntity.ok(brinquedos);}
-		catch (Exception e) {
-			e.printStackTrace(); // PRA VER O ERRO NO LOG
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-	}
+	public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categoria) {
+    	try {
+        	List<Brinquedo> brinquedos = brinquedoService.getBrinquedosPorCategoria(categoria);
+        	return ResponseEntity.ok(brinquedos);
+    	} catch (Exception e) {
+        	e.printStackTrace(); // imprime a stack trace completa no log
+		Map<String, String> error = new HashMap<>();
+		error.put("erro", "Erro ao buscar brinquedos por categoria");
+		error.put("detalhes", e.toString()); // imprime a descrição completa do erro
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+}
+
 
 }
 	
