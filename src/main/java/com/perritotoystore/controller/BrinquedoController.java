@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.perritotoystore.model.dto.BrinquedoDTO;
 import com.perritotoystore.model.entity.Brinquedo;
 import com.perritotoystore.service.BrinquedoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 
@@ -119,16 +121,29 @@ public class BrinquedoController {
 	
 	@GetMapping("/categorias/{categoria}")
 	public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categoria) {
-    	try {
-        	List<Brinquedo> brinquedos = brinquedoService.getBrinquedosPorCategoria(categoria);
-        	return ResponseEntity.ok(brinquedos);
-    	} catch (Exception e) {
-        	e.printStackTrace(); // imprime a stack trace completa no log
-		Map<String, String> error = new HashMap<>();
-		error.put("erro", "Erro ao buscar brinquedos por categoria");
-		error.put("detalhes", e.toString()); // imprime a descrição completa do erro
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-    }}
+    try {
+        List<Brinquedo> brinquedos = brinquedoService.getBrinquedosPorCategoria(categoria);
+
+        // Converte a lista de brinquedos para DTO
+        List<BrinquedoDTO> brinquedoDTOs = brinquedos.stream()
+                .map(brinquedo -> new BrinquedoDTO(
+                        brinquedo.getCodigo(),
+                        brinquedo.getDescricao(),
+                        brinquedo.getCategoria(),
+                        brinquedo.getValor(),
+                        brinquedo.getImg()  // Caso a imagem seja convertida para base64
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(brinquedoDTOs);
+    } catch (Exception e) {
+        e.printStackTrace();
+        Map<String, String> error = new HashMap<>();
+        error.put("erro", "Erro ao buscar brinquedos por categoria");
+        error.put("detalhes", e.toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+}
 	@PutMapping("/{codigo}")
 	public ResponseEntity<?> atualizarBrinquedo(@PathVariable int codigo, @RequestBody Brinquedo novoBrinquedo) {
 		try {
