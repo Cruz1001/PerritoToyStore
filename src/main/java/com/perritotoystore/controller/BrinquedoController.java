@@ -1,10 +1,10 @@
 package com.perritotoystore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.perritotoystore.model.entity.Brinquedo;
 import com.perritotoystore.service.BrinquedoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -57,12 +56,41 @@ public class BrinquedoController {
 	}
 	
 	//Criar brinquedo com imagem
-	@PostMapping("/img") //imagem
-	public ResponseEntity<Brinquedo> createBrinquedoImg(@RequestBody Brinquedo brinquedo, @RequestBody MultipartFile imageFile) throws IOException {
-		Brinquedo novoBrinquedo = brinquedoService.createBrinquedoImg(brinquedo, imageFile);
+	/*@PostMapping("/img") //imagem
+	public ResponseEntity<Brinquedo> createBrinquedoImg(@RequestPart Brinquedo brinquedo, @RequestPart MultipartFile imageFile) throws IOException {
+		byte[] imageBytes = imageFile.getBytes();
+
+		brinquedo.setImg(imageBytes);
+		brinquedo.setImgType(imageFile.getContentType());
+
+		Brinquedo novoBrinquedo = brinquedoService.createBrinquedoImg(brinquedo, imageBytes);
 		return  new  ResponseEntity<>(novoBrinquedo, HttpStatus.CREATED);
-	}
+	}*/
 	
+	@PostMapping("/img")
+	public ResponseEntity<Brinquedo> createBrinquedoComImagem(@RequestBody JsonNode body) throws IOException {
+		// extrai o brinquedo
+		JsonNode brinquedoNode = body.get("brinquedo");
+		String imageBase64 = body.get("imageFile").asText();
+	
+		// converte JSON em objeto Brinquedo
+		ObjectMapper mapper = new ObjectMapper();
+		Brinquedo brinquedo = mapper.treeToValue(brinquedoNode, Brinquedo.class);
+	
+		// trata a imagem base64
+		if (imageBase64 != null && !imageBase64.isEmpty()) {
+			if (imageBase64.contains(",")) {
+				imageBase64 = imageBase64.split(",")[1]; // remove prefixo data:image/jpeg;base64,
+			}
+			byte[] imagem = Base64.getDecoder().decode(imageBase64);
+			brinquedo.setImg(imagem);
+		}
+	
+		Brinquedo novoBrinquedo = brinquedoService.createBrinquedo(brinquedo);
+		return new ResponseEntity<>(novoBrinquedo, HttpStatus.CREATED);
+	}
+
+
 	//Get Imagem
 	@GetMapping("/img") //caminho img
 	public ResponseEntity<byte[]> getImgBrinquedoByCodigo(@PathVariable int codigo) {

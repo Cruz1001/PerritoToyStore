@@ -39,9 +39,9 @@ public class BrinquedoService {
     }
     
     //Lista categoria
-    public String[] getListCategoria() {
+    /*public String[] getListCategoria() {
     	Brinquedo brinquedo = new Brinquedo();
     	String [] listaCategoria = brinquedo.getListaCategoria();
     	return listaCategoria;
-    }
+    }*/
 }
