@@ -38,7 +38,7 @@ public class BrinquedoService {
     	return brinquedoRepository.save(brinquedo);
     }
     public List<Brinquedo> getBrinquedosPorCategoria(String categoria) {
-        return brinquedoRepository.findByListaCategoriaContaining(categoria);
+        return brinquedoRepository.findByCategoria(categoria);
     }
     
     

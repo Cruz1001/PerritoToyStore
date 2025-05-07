@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.perritotoystore.model.entity.Brinquedo;
 
 public interface BrinquedoRepository extends JpaRepository<Brinquedo, Integer>{
-        List<Brinquedo> findByListaCategoriaContaining(String categoria);
+        List<Brinquedo> findByCategoria(String categoria);
 
 }
