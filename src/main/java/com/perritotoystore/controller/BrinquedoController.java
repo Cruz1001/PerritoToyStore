@@ -118,36 +118,40 @@ public class BrinquedoController {
     		List<String> categorias = Arrays.asList(brinquedo.getListaCategoria());
     		return ResponseEntity.ok(categorias);
 }
-	
+
 @GetMapping("/categorias/{categoria}")
 public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categoria) {
     try {
         // Busca todos os brinquedos
-        List<Brinquedo> todosBrinquedos = brinquedoService.getTodosBrinquedos();
+        List<Brinquedo> todosBrinquedos = brinquedoService.getAllBrinquedos();
 
-        // Filtra pela categoria no controller (case-insensitive, se quiser)
-        List<Brinquedo> brinquedosFiltrados = todosBrinquedos.stream()
+        // Filtra pela categoria no controller (case-insensitive)
+        List<Map<String, Object>> brinquedosFiltrados = todosBrinquedos.stream()
             .filter(b -> b.getCategoria() != null && b.getCategoria().equalsIgnoreCase(categoria))
-            .collect(Collectors.toList());
+            .map(b -> {
+                Map<String, Object> brinquedoMap = new HashMap<>();
+                brinquedoMap.put("codigo", b.getCodigo());
+                brinquedoMap.put("descricao", b.getDescricao());
+                brinquedoMap.put("categoria", b.getCategoria());
+                brinquedoMap.put("marca", b.getMarca());
+                brinquedoMap.put("valor", b.getValor());
+                brinquedoMap.put("detalhes", b.getDetalhes());
 
-        // Converte para DTO com imagem em base64
-        List<BrinquedoDTO> brinquedoDTOs = brinquedosFiltrados.stream()
-            .map(brinquedo -> {
-                String imgBase64 = null;
-                if (brinquedo.getImg() != null && brinquedo.getImg().length > 0) {
-                    imgBase64 = Base64.getEncoder().encodeToString(brinquedo.getImg());
+                // Converte imagem para base64, se existir
+                if (b.getImg() != null && b.getImg().length > 0) {
+                    String base64Img = Base64.getEncoder().encodeToString(b.getImg());
+                    brinquedoMap.put("imgBase64", base64Img);
+                    brinquedoMap.put("imgType", b.getImgType());
+                } else {
+                    brinquedoMap.put("imgBase64", null);
+                    brinquedoMap.put("imgType", null);
                 }
-                return new BrinquedoDTO(
-                        brinquedo.getCodigo(),
-                        brinquedo.getDescricao(),
-                        brinquedo.getCategoria(),
-                        brinquedo.getValor(),
-                        imgBase64
-                );
+
+                return brinquedoMap;
             })
             .collect(Collectors.toList());
 
-        return ResponseEntity.ok(brinquedoDTOs);
+        return ResponseEntity.ok(brinquedosFiltrados);
 
     } catch (Exception e) {
         e.printStackTrace();
@@ -157,6 +161,7 @@ public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categori
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
+
 
 
 	@PutMapping("/{codigo}")
