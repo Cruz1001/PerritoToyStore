@@ -20,7 +20,7 @@ public class Brinquedo {
 	
 	
 	@Lob
-    	@Basic(fetch = FetchType.EAGER)
+	@Basic(fetch = FetchType.LAZY)
 	private byte[] img;
 	private String imgType;
 	
