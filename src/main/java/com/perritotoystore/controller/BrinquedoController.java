@@ -137,15 +137,9 @@ public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categori
                 brinquedoMap.put("valor", b.getValor());
                 brinquedoMap.put("detalhes", b.getDetalhes());
 
-                // Converte imagem para base64, se existir
-                if (b.getImg() != null && b.getImg().length > 0) {
-                    String base64Img = Base64.getEncoder().encodeToString(b.getImg());
-                    brinquedoMap.put("imgBase64", base64Img);
-                    brinquedoMap.put("imgType", b.getImgType());
-                } else {
-                    brinquedoMap.put("imgBase64", null);
-                    brinquedoMap.put("imgType", null);
-                }
+                // A imagem já está em Base64, então apenas a inclui
+                brinquedoMap.put("imgBase64", b.getImg());
+                brinquedoMap.put("imgType", b.getImgType());
 
                 return brinquedoMap;
             })
@@ -161,6 +155,7 @@ public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categori
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
+
 
 
 
