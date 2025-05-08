@@ -122,23 +122,27 @@ public class BrinquedoController {
 @GetMapping("/categorias/{categoria}")
 public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categoria) {
     try {
+        // Filtra brinquedos pela categoria diretamente no serviço
         List<Brinquedo> brinquedos = brinquedoService.getBrinquedosPorCategoria(categoria);
 
+        // Converte a lista de brinquedos para DTO
         List<BrinquedoDTO> brinquedoDTOs = brinquedos.stream()
-                .map(brinquedo -> {
-                    String imgBase64 = null;
-                    if (brinquedo.getImg() != null) {
-                        imgBase64 = Base64.getEncoder().encodeToString(brinquedo.getImg());
-                    }
-                    return new BrinquedoDTO(
-                            brinquedo.getCodigo(),
-                            brinquedo.getDescricao(),
-                            brinquedo.getCategoria(),
-                            brinquedo.getValor(),
-                            imgBase64
-                    );
-                })
-                .collect(Collectors.toList());
+            .map(brinquedo -> {
+                String imgBase64 = null;
+                if (brinquedo.getImg() != null && brinquedo.getImg().length > 0) {
+                    // Converte a imagem para Base64, se não for null ou vazia
+                    imgBase64 = Base64.getEncoder().encodeToString(brinquedo.getImg());
+                }
+
+                return new BrinquedoDTO(
+                        brinquedo.getCodigo(),
+                        brinquedo.getDescricao(),
+                        brinquedo.getCategoria(),
+                        brinquedo.getValor(),
+                        imgBase64  // Inclui a imagem como Base64, se disponível
+                );
+            })
+            .collect(Collectors.toList());
 
         return ResponseEntity.ok(brinquedoDTOs);
     } catch (Exception e) {
@@ -149,6 +153,7 @@ public ResponseEntity<?> getBrinquedosPorCategoria(@PathVariable String categori
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
+
 	@PutMapping("/{codigo}")
 	public ResponseEntity<?> atualizarBrinquedo(@PathVariable int codigo, @RequestBody Brinquedo novoBrinquedo) {
 		try {
