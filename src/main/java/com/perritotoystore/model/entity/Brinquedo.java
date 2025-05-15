@@ -101,7 +101,10 @@ public class Brinquedo {
 	    String[] categorias = {
 	        "Jogos Eletrônicos",
 	        "Jogos Infantis",
-	        "Pelucias"
+	        "Pelucias",
+		"Vestimentas",
+		"Brinquedos",
+		"Automóveis"
 	    };
 	    return categorias;
 	}
